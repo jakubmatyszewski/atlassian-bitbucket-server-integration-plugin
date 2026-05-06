@@ -104,7 +104,9 @@ public class TriggerWebhookCreationTest {
     @Test
     public void testRegisterNewWebhookPullRequestUpdatedMultiBranch() throws Exception {
         MultiBranchProject<WorkflowJob, WorkflowRun> mbp = projectHandler.createMultibranchJob("MyMultibranch", projectKey, repoSlug);
-        mbp.addTrigger(new BitbucketWebhookMultibranchTrigger(true, false));
+        BitbucketWebhookMultibranchTrigger trigger = new BitbucketWebhookMultibranchTrigger();
+        trigger.setPullRequestTrigger(true);
+        mbp.addTrigger(trigger);
 
         //this is called by Jenkins on `submit` which is `protected` we simulate the form submit by calling the 'afterSave' directly
         mbp.getSCMSources().forEach(SCMSource::afterSave);
@@ -131,7 +133,9 @@ public class TriggerWebhookCreationTest {
     @Test
     public void testRegisterNewWebhookRefsChangedMultiBranch() throws Exception {
         MultiBranchProject<WorkflowJob, WorkflowRun> mbp = projectHandler.createMultibranchJob("MyMultibranch", projectKey, repoSlug);
-        mbp.addTrigger(new BitbucketWebhookMultibranchTrigger(false, true));
+        BitbucketWebhookMultibranchTrigger trigger = new BitbucketWebhookMultibranchTrigger();
+        trigger.setRefTrigger(true);
+        mbp.addTrigger(trigger);
 
         //this is called by Jenkins on `submit` which is `protected` we simulate the form submit by calling the 'afterSave' directly
         mbp.getSCMSources().forEach(SCMSource::afterSave);

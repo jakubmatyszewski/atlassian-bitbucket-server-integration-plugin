@@ -338,8 +338,9 @@ public class BitbucketSCMSourceTest {
         SCMHeadEvent<PullRequestOpenedWebhookEvent> mockEvent = mock(SCMHeadEvent.class);
         PullRequestOpenedWebhookEvent payload = mock(PullRequestOpenedWebhookEvent.class);
         when(mockEvent.getPayload()).thenReturn(payload);
-        when(owner.getTriggers()).thenReturn(singletonMap(new BitbucketWebhookMultibranchTrigger.DescriptorImpl(),
-                new BitbucketWebhookMultibranchTrigger(true, false)));
+        BitbucketWebhookMultibranchTrigger trigger = new BitbucketWebhookMultibranchTrigger();
+        trigger.setPullRequestTrigger(true);
+        when(owner.getTriggers()).thenReturn(singletonMap(new BitbucketWebhookMultibranchTrigger.DescriptorImpl(), trigger));
 
         assertThat(bitbucketSCMsource.isEventApplicable(mockEvent), equalTo(true));
     }
@@ -353,8 +354,9 @@ public class BitbucketSCMSourceTest {
         SCMHeadEvent<PullRequestClosedWebhookEvent> mockEvent = mock(SCMHeadEvent.class);
         PullRequestClosedWebhookEvent payload = mock(PullRequestClosedWebhookEvent.class);
         when(mockEvent.getPayload()).thenReturn(payload);
-        when(owner.getTriggers()).thenReturn(singletonMap(new BitbucketWebhookMultibranchTrigger.DescriptorImpl(),
-                new BitbucketWebhookMultibranchTrigger(true, false)));
+        BitbucketWebhookMultibranchTrigger trigger = new BitbucketWebhookMultibranchTrigger();
+        trigger.setPullRequestTrigger(true);
+        when(owner.getTriggers()).thenReturn(singletonMap(new BitbucketWebhookMultibranchTrigger.DescriptorImpl(), trigger));
 
         assertThat(bitbucketSCMsource.isEventApplicable(mockEvent), equalTo(false));
     }
@@ -368,8 +370,9 @@ public class BitbucketSCMSourceTest {
         SCMHeadEvent<String> mockEvent = mock(SCMHeadEvent.class);
 
         when(mockEvent.getPayload()).thenReturn("This is not a Bitbucket Server event");
-        when(owner.getTriggers()).thenReturn(singletonMap(new BitbucketWebhookMultibranchTrigger.DescriptorImpl(),
-                new BitbucketWebhookMultibranchTrigger(true, false)));
+        BitbucketWebhookMultibranchTrigger trigger = new BitbucketWebhookMultibranchTrigger();
+        trigger.setPullRequestTrigger(true);
+        when(owner.getTriggers()).thenReturn(singletonMap(new BitbucketWebhookMultibranchTrigger.DescriptorImpl(), trigger));
 
         assertThat(bitbucketSCMsource.isEventApplicable(mockEvent), equalTo(false));
     }

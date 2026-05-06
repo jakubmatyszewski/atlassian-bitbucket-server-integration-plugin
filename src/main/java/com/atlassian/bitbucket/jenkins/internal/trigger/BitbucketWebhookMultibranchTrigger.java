@@ -10,6 +10,7 @@ import hudson.triggers.TriggerDescriptor;
 import jenkins.branch.MultiBranchProject;
 import org.jenkinsci.Symbol;
 import org.kohsuke.stapler.DataBoundConstructor;
+import org.kohsuke.stapler.DataBoundSetter;
 
 import javax.inject.Inject;
 import java.util.logging.Logger;
@@ -20,8 +21,8 @@ public class BitbucketWebhookMultibranchTrigger extends Trigger<MultiBranchProje
     private static final int BUILD_ON_PULL_REQUEST_VERSION = 1;
     private static final Logger LOGGER = Logger.getLogger(BitbucketWebhookMultibranchTrigger.class.getName());
 
-    private final boolean pullRequestTrigger;
-    private final boolean refTrigger;
+    private boolean pullRequestTrigger;
+    private boolean refTrigger;
     /**
      * This exists as a simple upgrade task. Old classes will de-serialise this to default value (of 0). New
      * classes will serialise the actual value that was stored. Because the constructor is not run during de-serialisation
@@ -31,11 +32,9 @@ public class BitbucketWebhookMultibranchTrigger extends Trigger<MultiBranchProje
      */
     private final int version;
 
-    @SuppressWarnings("RedundantNoArgConstructor") // Required for Stapler
+    @SuppressWarnings("RedundantNoArgConstructor") // Required for Stapler/Job DSL
     @DataBoundConstructor
-    public BitbucketWebhookMultibranchTrigger(boolean pullRequestTrigger, boolean refTrigger) {
-        this.refTrigger = refTrigger;
-        this.pullRequestTrigger = pullRequestTrigger;
+    public BitbucketWebhookMultibranchTrigger() {
         version = BUILD_ON_PULL_REQUEST_VERSION;
     }
 
@@ -67,6 +66,11 @@ public class BitbucketWebhookMultibranchTrigger extends Trigger<MultiBranchProje
         return pullRequestTrigger;
     }
 
+    @DataBoundSetter
+    public void setPullRequestTrigger(boolean pullRequestTrigger) {
+        this.pullRequestTrigger = pullRequestTrigger;
+    }
+
     public boolean isRefTrigger() {
         /*
          * If it is an old version we should return true as that is the old default.
@@ -77,6 +81,11 @@ public class BitbucketWebhookMultibranchTrigger extends Trigger<MultiBranchProje
         } else {
             return refTrigger;
         }
+    }
+
+    @DataBoundSetter
+    public void setRefTrigger(boolean refTrigger) {
+        this.refTrigger = refTrigger;
     }
 
     @Symbol("BitbucketWebhookMultibranchTrigger")
